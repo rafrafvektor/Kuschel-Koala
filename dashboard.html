@@ -1,12 +1,13 @@
 
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><title>Debug Dashboard</title></head>
+<head><meta charset="utf-8"><title>Koala Upload</title></head>
 <body>
-  <h2>🎯 Debug Upload</h2>
+  <h2>🐨 Koala Nachricht hochladen</h2>
   <input type="file" id="upload" accept="audio/*,video/*"><br><br>
-  <button id="uploadBtn">Hochladen</button>
-  <pre id="status" style="white-space: pre-wrap; font-family: monospace; background: #eee; padding: 1em;"></pre>
+  <button id="uploadBtn">📤 Hochladen</button>
+  <div id="status" style="white-space: pre-wrap; font-family: monospace; background: #f0f0f0; padding: 1em; margin-top: 1em;"></div>
+  <div id="preview" style="margin-top: 1em;"></div>
 
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
@@ -21,39 +22,42 @@
     }
 
     async function uploadFile() {
-      log("📦 Upload gestartet");
-      const fileInput = document.getElementById("upload");
-      if (!fileInput) return log("❌ Kein file input gefunden!");
+      const status = document.getElementById("status");
+      const preview = document.getElementById("preview");
+      status.innerText = "🔁 Upload läuft... bitte habe etwas Geduld.";
+      preview.innerHTML = "";
 
-      const file = fileInput.files[0];
-      if (!file) return log("⚠️ Bitte zuerst eine Datei auswählen.");
-
-      log("📁 Datei: " + file.name);
+      const file = document.getElementById("upload").files[0];
+      if (!file) {
+        status.innerText = "⚠️ Bitte zuerst eine Datei auswählen.";
+        return;
+      }
 
       try {
         const userResp = await supabase.auth.getUser();
-        log("🔑 getUser() aufgerufen");
-        const user = userResp.data?.user;
-        if (!user) return log("❌ Kein Benutzer angemeldet oder Token ungültig");
-
-        log("👤 User ID: " + user.id);
+        const user = userResp.data.user;
+        if (!user) {
+          status.innerText = "❌ Kein Benutzer angemeldet!";
+          return;
+        }
 
         const filePath = user.id + "/" + file.name;
-        log("📤 Datei wird hochgeladen an: " + filePath);
-
         const result = await supabase.storage.from("media").upload(filePath, file, { upsert: true });
 
         if (result.error) {
-          log("❌ Fehler beim Upload: " + result.error.message);
+          status.innerText = "❌ Fehler beim Upload: " + result.error.message;
         } else {
-          const mediaUrl = "https://ejgjwijbbanpxylbrumr.supabase.co/storage/v1/object/public/media/" + filePath;
+          const mediaUrl = supabase.storageUrl + "/object/public/media/" + filePath;
           const playbackUrl = "play.html?u=" + user.id;
-          log("✅ Upload erfolgreich!");
-          log("🌐 Medien-URL: " + mediaUrl);
-          log("▶️ Wiedergabe-Link: " + playbackUrl);
+          status.innerText = "✅ Upload erfolgreich!";
+          preview.innerHTML = `
+            <p>🎬 <strong>Wiedergabe-Link:</strong></p>
+            <a href="${playbackUrl}" target="_blank"><button>▶️ Video ansehen</button></a>
+            <p><a href="${mediaUrl}" target="_blank">${mediaUrl}</a></p>
+          `;
         }
       } catch (err) {
-        log("🚨 JavaScript Fehler: " + err.message);
+        status.innerText = "🚨 Unerwarteter Fehler: " + err.message;
       }
     }
 
