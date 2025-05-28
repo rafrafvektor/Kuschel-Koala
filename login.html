@@ -10,20 +10,15 @@
   <p id="status"></p>
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
-
-    const supabase = createClient("https://ejgjwijbbanpxylbrumr.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...");
-
+    const supabase = createClient("https://ejgjwijbbanpxylbrumr.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqZ2p3aWpiYmFucHh5bGJydW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg0NDkwOTksImV4cCI6MjA2NDAyNTA5OX0.K3SuYyTYHO-5_QBZ0pMGTMgcpI0wdGTM5Zo65_shww0");
     window.login = async function () {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
-      if (error) {
-        document.getElementById("status").innerText = "❌ Fehler: " + error.message;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const result = await supabase.auth.signInWithPassword({ email, password });
+      if (result.error) {
+        document.getElementById('status').innerText = '❌ Fehler: ' + result.error.message;
       } else {
-        window.location.href = "dashboard.html";
+        window.location.href = 'dashboard.html';
       }
     };
   </script>
