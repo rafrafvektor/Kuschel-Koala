@@ -5,7 +5,7 @@
 <body>
   <h2>Datei hochladen</h2>
   <input type="file" id="upload" accept="audio/*,video/*"><br><br>
-  <button onclick="uploadFile()">Hochladen</button>
+  <button id="uploadBtn">Hochladen</button>
   <p id="status" style="white-space: pre-wrap; font-family: monospace;"></p>
 
   <script type="module">
@@ -54,6 +54,8 @@
         status.innerText += "\n🚨 Unerwarteter Fehler: " + e.message;
       }
     }
+
+    document.getElementById("uploadBtn").addEventListener("click", uploadFile);
   </script>
 </body>
 </html>
