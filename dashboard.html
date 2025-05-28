@@ -15,12 +15,17 @@
       const file = document.getElementById("upload").files[0];
       const filePath = user.id + "/" + file.name;
       const result = await supabase.storage.from("media").upload(filePath, file, { upsert: true });
+      const status = document.getElementById("status");
       if (result.error) {
-        document.getElementById("status").innerText = result.error.message;
-        console.error("Upload Error:", result.error);
+        status.innerText = "❌ Fehler beim Hochladen: " + result.error.message;
       } else {
-        const url = "https://ejgjwijbbanpxylbrumr.supabase.co/storage/v1/object/public/media/" + filePath;
-        document.getElementById("status").innerText = "Hochgeladen: " + url;
+        const mediaUrl = "https://ejgjwijbbanpxylbrumr.supabase.co/storage/v1/object/public/media/" + filePath;
+        const playbackUrl = "play.html?u=" + user.id;
+        status.innerHTML = `
+          ✅ Hochgeladen: <a href="${mediaUrl}" target="_blank">${mediaUrl}</a><br>
+          🎬 Wiedergabe-Link: <a href="${playbackUrl}" target="_blank">${playbackUrl}</a><br>
+          <a href="${playbackUrl}" target="_blank"><button>Jetzt abspielen</button></a>
+        `;
       }
     }
   </script>
