@@ -7,9 +7,11 @@
   <input type="file" id="upload" accept="audio/*,video/*">
   <button onclick="uploadFile()">Hochladen</button>
   <p id="status"></p>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <script src="js/supabase.js"></script>
-  <script>
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
+
+    const supabase = createClient("https://ejgjwijbbanpxylbrumr.supabase.co", "{supabase_key}");
+
     async function uploadFile() {
       const user = (await supabase.auth.getUser()).data.user;
       const file = document.getElementById("upload").files[0];
@@ -17,7 +19,7 @@
       const { data, error } = await supabase.storage.from("media").upload(filePath, file, { upsert: true });
       if (error) document.getElementById("status").innerText = error.message;
       else {
-        const url = `${SUPABASE_URL}/storage/v1/object/public/media/${filePath}`;
+        const url = `https://ejgjwijbbanpxylbrumr.supabase.co/storage/v1/object/public/media/${filePath}`;
         document.getElementById("status").innerText = "Hochgeladen: " + url;
       }
     }

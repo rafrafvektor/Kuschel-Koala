@@ -5,16 +5,18 @@
 <body>
   <h2>🎧 Deine Koala-Nachricht</h2>
   <div id="mediaContainer"><p>Lade...</p></div>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <script src="js/supabase.js"></script>
-  <script>
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
+
+    const supabase = createClient("https://ejgjwijbbanpxylbrumr.supabase.co", "{supabase_key}");
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get("u");
+
     async function fetchMedia() {
       const { data, error } = await supabase.storage.from("media").list(userId);
       if (data && data.length > 0) {
         const fileName = data[0].name;
-        const fileUrl = `${SUPABASE_URL}/storage/v1/object/public/media/${userId}/${fileName}`;
+        const fileUrl = `https://ejgjwijbbanpxylbrumr.supabase.co/storage/v1/object/public/media/${userId}/${fileName}`;
         const container = document.getElementById("mediaContainer");
         if (fileName.endsWith(".mp3")) {
           container.innerHTML = `<audio controls autoplay src="${fileUrl}"></audio>`;

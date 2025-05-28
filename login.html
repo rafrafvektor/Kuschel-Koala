@@ -7,16 +7,25 @@
   <input id="email" type="email" placeholder="E-Mail"><br>
   <input id="password" type="password" placeholder="Passwort"><br>
   <button onclick="login()">Login</button>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <script src="js/supabase.js"></script>
-  <script>
-    async function login() {
-      const email = document.getElementById('email').value;
-      const pw = document.getElementById('password').value;
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password: pw });
-      if (error) alert(error.message);
-      else window.location.href = 'dashboard.html';
-    }
+  <p id="status"></p>
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
+
+    const supabase = createClient("https://ejgjwijbbanpxylbrumr.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...");
+
+    window.login = async function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+      if (error) {
+        document.getElementById("status").innerText = "❌ Fehler: " + error.message;
+      } else {
+        window.location.href = "dashboard.html";
+      }
+    };
   </script>
 </body>
 </html>
