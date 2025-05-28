@@ -17,6 +17,7 @@
       const result = await supabase.storage.from("media").upload(filePath, file, { upsert: true });
       if (result.error) {
         document.getElementById("status").innerText = result.error.message;
+        console.error("Upload Error:", result.error);
       } else {
         const url = "https://ejgjwijbbanpxylbrumr.supabase.co/storage/v1/object/public/media/" + filePath;
         document.getElementById("status").innerText = "Hochgeladen: " + url;
