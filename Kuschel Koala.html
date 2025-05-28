@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kuschel-Koala Nachricht</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2rem;
+      background-color: #fefefe;
+    }
+    h1 {
+      color: #444;
+    }
+    .media {
+      margin-top: 2rem;
+    }
+    audio, video {
+      max-width: 90%;
+      margin: 1rem 0;
+    }
+    input {
+      width: 90%;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎧 Deine Kuschel-Koala Nachricht 🎥</h1>
+
+  <p>🔗 <strong>Audio-Link einfügen:</strong></p>
+  <input type="text" id="audioLink" placeholder="https://..." oninput="updateMedia()" />
+
+  <p>🔗 <strong>Video-Link einfügen:</strong></p>
+  <input type="text" id="videoLink" placeholder="https://..." oninput="updateMedia()" />
+
+  <div class="media">
+    <h2>🗣 Audio</h2>
+    <audio id="audioPlayer" controls>
+      <source src="" type="audio/mp3">
+      Dein Browser unterstützt kein Audio.
+    </audio>
+
+    <h2>🎬 Video</h2>
+    <video id="videoPlayer" controls>
+      <source src="" type="video/mp4">
+      Dein Browser unterstützt kein Video.
+    </video>
+  </div>
+
+  <p>👨‍👧 Von Papa mit ganz viel Liebe 🐨</p>
+
+  <script>
+    function updateMedia() {
+      const audioLink = document.getElementById('audioLink').value;
+      const videoLink = document.getElementById('videoLink').value;
+
+      document.getElementById('audioPlayer').src = audioLink;
+      document.getElementById('videoPlayer').src = videoLink;
+    }
+  </script>
+</body>
+</html>
