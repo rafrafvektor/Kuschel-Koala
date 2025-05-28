@@ -1,26 +1,37 @@
 
 <!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><title>Login</title></head>
-<body>
-  <h2>Login</h2>
-  <input id="email" type="email" placeholder="E-Mail"><br>
-  <input id="password" type="password" placeholder="Passwort"><br>
-  <button onclick="login()">Login</button>
-  <p id="status"></p>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kuschel-Koala</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans p-4">
+<div class="max-w-xl mx-auto bg-white shadow-md rounded-lg p-6 space-y-4">
+  <h1 class="text-3xl font-bold text-center text-green-700">Kuschel-Koala 🐨</h1>
+
+  <p class="text-center text-gray-600">Logge dich ein, um deine Koala-Nachricht zu verwalten.</p>
+  <input id="email" type="email" placeholder="E-Mail" class="w-full border rounded p-2" />
+  <input id="password" type="password" placeholder="Passwort" class="w-full border rounded p-2" />
+  <button id="loginBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded">Anmelden</button>
+  <div id="status" class="text-sm bg-gray-200 rounded p-3 whitespace-pre-wrap mt-2"></div>
+
   <script type="module">
-    import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
-    const supabase = createClient("https://ejgjwijbbanpxylbrumr.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqZ2p3aWpiYmFucHh5bGJydW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg0NDkwOTksImV4cCI6MjA2NDAyNTA5OX0.K3SuYyTYHO-5_QBZ0pMGTMgcpI0wdGTM5Zo65_shww0");
-    window.login = async function () {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const result = await supabase.auth.signInWithPassword({ email, password });
-      if (result.error) {
-        document.getElementById('status').innerText = '❌ Fehler: ' + result.error.message;
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+    const supabase = createClient("https://ejgjwijbbanpxylbrumr.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...shww0");
+
+    document.getElementById("loginBtn").onclick = async () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        document.getElementById("status").innerText = "❌ Fehler: " + error.message;
       } else {
-        window.location.href = 'dashboard.html';
+        window.location.href = "dashboard.html";
       }
     };
   </script>
-</body>
-</html>
+
+</div></body></html>

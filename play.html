@@ -1,33 +1,27 @@
 
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><title>Koala Wiedergabe</title></head>
-<body>
-  <h2>🎧 Deine Koala-Nachricht</h2>
-  <div id="mediaContainer"><p>Lade...</p></div>
+<!DOCTYPE html><html lang="de"><head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Koala Video</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black flex items-center justify-center h-screen">
+  <video id="video" controls class="max-w-full max-h-full rounded shadow-lg"></video>
   <script type="module">
-    import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
-    const supabase = createClient("https://ejgjwijbbanpxylbrumr.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqZ2p3aWpiYmFucHh5bGJydW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg0NDkwOTksImV4cCI6MjA2NDAyNTA5OX0.K3SuYyTYHO-5_QBZ0pMGTMgcpI0wdGTM5Zo65_shww0");
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get("u");
-    async function fetchMedia() {
-      const result = await supabase.storage.from("media").list(userId);
-      if (result.data && result.data.length > 0) {
-        const fileName = result.data[0].name;
-        const fileUrl = "https://ejgjwijbbanpxylbrumr.supabase.co/storage/v1/object/public/media/" + userId + "/" + fileName;
-        const container = document.getElementById("mediaContainer");
-        if (fileName.endsWith(".mp3")) {
-          container.innerHTML = `<audio controls autoplay src="${fileUrl}"></audio>`;
-        } else if (fileName.endsWith(".mp4")) {
-          container.innerHTML = `<video controls autoplay src="${fileUrl}" width="300"></video>`;
-        } else {
-          container.innerHTML = "Unbekanntes Dateiformat";
-        }
-      } else {
-        document.getElementById("mediaContainer").innerText = "Keine Datei gefunden.";
-      }
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+    const supabase = createClient("https://ejgjwijbbanpxylbrumr.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...shww0");
+
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get("u");
+    if (!userId) alert("Kein Benutzer angegeben.");
+
+    const list = await supabase.storage.from("media").list(userId);
+    if (list.data && list.data.length > 0) {
+      const file = list.data[0];
+      const url = supabase.storageUrl + "/object/public/media/" + userId + "/" + file.name;
+      document.getElementById("video").src = url;
+    } else {
+      alert("Kein Video gefunden.");
     }
-    fetchMedia();
   </script>
-</body>
-</html>
+</body></html>
