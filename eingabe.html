@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medien-Link erstellen</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+    }
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+    }
+    .link-box {
+      margin-top: 2rem;
+      word-break: break-all;
+      background: #eee;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎯 Erstelle einen Link für dein Kuschel-Koala QR</h1>
+
+  <label>🔗 Audio-Link:</label>
+  <input type="text" id="audioInput" placeholder="https://...mp3" />
+
+  <label>🔗 Video-Link:</label>
+  <input type="text" id="videoInput" placeholder="https://...mp4" />
+
+  <button onclick="generateLink()">📎 Link erstellen</button>
+
+  <div id="output" class="link-box"></div>
+
+  <script>
+    function generateLink() {
+      const audio = encodeURIComponent(document.getElementById('audioInput').value);
+      const video = encodeURIComponent(document.getElementById('videoInput').value);
+      const baseURL = "https://rafrafvektor.github.io/Kuschel-Koala/";
+
+      let finalURL = baseURL + "?";
+      if (audio) finalURL += "audio=" + audio;
+      if (video) finalURL += (audio ? "&" : "") + "video=" + video;
+
+      document.getElementById('output').innerHTML = `<strong>Fertiger Link:</strong><br><a href="${finalURL}" target="_blank">${finalURL}</a>`;
+    }
+  </script>
+</body>
+</html>
