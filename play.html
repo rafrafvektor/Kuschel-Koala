@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Koala Wiedergabe</title></head>
+<body>
+  <h2>🎧 Deine Koala-Nachricht</h2>
+  <div id="mediaContainer"><p>Lade...</p></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="js/supabase.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get("u");
+    async function fetchMedia() {
+      const { data, error } = await supabase.storage.from("media").list(userId);
+      if (data && data.length > 0) {
+        const fileName = data[0].name;
+        const fileUrl = `${SUPABASE_URL}/storage/v1/object/public/media/${userId}/${fileName}`;
+        const container = document.getElementById("mediaContainer");
+        if (fileName.endsWith(".mp3")) {
+          container.innerHTML = `<audio controls autoplay src="${fileUrl}"></audio>`;
+        } else if (fileName.endsWith(".mp4")) {
+          container.innerHTML = `<video controls autoplay src="${fileUrl}" width="300"></video>`;
+        } else {
+          container.innerHTML = "Unbekanntes Dateiformat";
+        }
+      } else {
+        document.getElementById("mediaContainer").innerText = "Keine Datei gefunden.";
+      }
+    }
+    fetchMedia();
+  </script>
+</body>
+</html>
